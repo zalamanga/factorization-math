@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Matchalgo" default="default" basedir=".">
+    <description>Build and run the prime factorization console application.</description>
+    <import file="nbproject/build-impl.xml"/>
+
+    <target name="test" depends="compile-test" description="Run regression tests without external libraries.">
+        <java classname="matchalgo.MatchalgoTest" fork="true" failonerror="true">
+            <classpath path="${run.test.classpath}"/>
+            <assertions enableSystemAssertions="true">
+                <enable/>
+            </assertions>
+        </java>
+    </target>
+</project>
