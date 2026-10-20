@@ -1,6 +1,8 @@
 # Factorization Math
 
-Program konsol Java untuk menguraikan bilangan bulat menjadi faktor prima. Contohnya, `46 = 2 × 23` dan `12 = 2 × 2 × 3`. Faktor prima yang berulang tetap ditampilkan; hasil ini berbeda dari daftar semua pembagi bilangan.
+Program konsol Java dengan dua fitur: faktorisasi prima serta perhitungan FPB/GCD dan KPK/LCM. Keduanya tersedia melalui satu menu utama.
+
+Contoh faktorisasi prima: `46 = 2 × 23` dan `12 = 2 × 2 × 3`. Faktor yang berulang tetap ditampilkan; hasil ini berbeda dari daftar semua pembagi bilangan. Untuk pasangan `12` dan `18`, FPB-nya `6` dan KPK-nya `36`.
 
 Program memakai Java Standard Library tanpa dependency tambahan atau database.
 
@@ -49,43 +51,53 @@ ant test jar
 
 ## Masukan dan keluaran
 
-Contoh sesi interaktif; angka setelah prompt adalah masukan pengguna:
+Potongan sesi interaktif untuk pilihan FPB/KPK; angka setelah prompt adalah masukan pengguna:
 
 ```text
-Enter an integer (0 to exit): 46
-Prime factors of 46: 2 23
-Enter an integer (0 to exit): 12
-Prime factors of 12: 2 2 3
-Enter an integer (0 to exit): 0
-Exiting the program.
+Math tools
+1. Prime factorization
+2. GCD / LCM (FPB / KPK)
+0. Exit
+Choose an option: 2
+Enter the 1st number: 12
+Enter the 2nd number: 18
+GCD (FPB): 6
+LCM (KPK): 36
 ```
 
-- Bilangan `2` sampai `2147483647` diuraikan menjadi faktor prima.
-- `1` menampilkan `1 has no prime factors.` lalu program meminta masukan lagi.
-- `0` mengakhiri program.
-- Bilangan negatif ditolak dengan pesan, lalu program meminta masukan lagi.
-- Token bukan bilangan bulat atau di luar jangkauan `int` ditolak tanpa menghentikan program.
-- Akhir masukan (EOF) mengakhiri program tanpa pesan kesalahan.
+- Pilih `1` untuk faktorisasi prima. Masukan `12` menghasilkan `Prime factors of 12: 2 2 3`; `1` menampilkan `1 has no prime factors.`.
+- Pada prompt faktorisasi, `0` kembali ke menu dan bilangan negatif ditolak.
+- Pilih `2` untuk menghitung FPB dan KPK dua bilangan. Nilai negatif dan nol diterima; pasangan `0, 0` menghasilkan FPB `0` dan KPK `0`.
+- Pilih `0` pada menu utama untuk keluar. Setelah perhitungan, program kembali ke menu.
+- Token bukan bilangan bulat atau di luar jangkauan `int` ditolak tanpa menghentikan program. Rentang `int` adalah `-2147483648` sampai `2147483647`.
+- Akhir masukan (EOF) pada prompt mana pun mengakhiri program tanpa pesan kesalahan atau hasil pasangan yang belum lengkap.
 
 Masukan dipisahkan oleh spasi atau baris baru. Bilangan desimal seperti `2.5` tidak diterima.
 
 ## API dan algoritma
 
-`matchalgo.Matchalgo.findFactors(int number)` mengembalikan `List<Integer>` berisi faktor prima dalam urutan naik, termasuk faktor yang berulang. Metode ini mengembalikan daftar kosong untuk nilai kurang dari `2`, termasuk bilangan negatif; antarmuka konsol menolak masukan negatif.
+Semua kelas berikut berada dalam package `matchalgo`.
 
-```java
-Matchalgo.findFactors(46); // [2, 23]
-Matchalgo.findFactors(12); // [2, 2, 3]
-Matchalgo.findFactors(1);  // []
-```
+| Pemanggilan | Hasil |
+| --- | --- |
+| `NumberTheory.primeFactors(12)` | `List<Integer>` berisi `[2, 2, 3]` |
+| `Matchalgo.findFactors(46)` | `[2, 23]`; API lama tetap tersedia dan memanggil `NumberTheory.primeFactors` |
+| `NumberTheory.gcd(-12, 18)` | `6L` |
+| `NumberTheory.lcm(-12, 18)` | `36L` |
 
-Algoritma membagi faktor `2`, lalu memeriksa calon pembagi ganjil hingga akar bilangan yang tersisa. Pemeriksaan memakai pembagian untuk menghindari overflow pada perhitungan batas. Waktu terburuknya `O(√n)`.
+Faktorisasi mengembalikan daftar baru yang dapat diubah, berurutan naik dan menyertakan pengulangan. Semua nilai kurang dari `2` menghasilkan daftar kosong, termasuk bilangan negatif.
+
+FPB dan KPK menerima seluruh rentang `int` dan mengembalikan hasil `long` yang tidak negatif. `gcd(0, 0) = 0`; KPK bernilai `0` jika salah satu masukan `0`. Konversi ke `long` menjaga nilai batas: `gcd(Integer.MIN_VALUE, 0) = 2147483648L`.
+
+Faktorisasi membagi faktor `2`, lalu memeriksa pembagi ganjil hingga akar bilangan tersisa, dengan waktu terburuk `O(√n)`. FPB memakai algoritma Euclid; KPK dihitung menggunakan FPB dan aritmetika `long`.
 
 ## Struktur repository
 
 ```text
-src/matchalgo/Matchalgo.java      Program konsol dan faktorisasi
-test/matchalgo/MatchalgoTest.java Tes mandiri tanpa library tambahan
+src/matchalgo/Matchalgo.java      Menu konsol dan API kompatibilitas
+src/matchalgo/NumberTheory.java  Faktorisasi prima, FPB, dan KPK
+test/matchalgo/MatchalgoTest.java Tes menu dan penanganan masukan
+test/matchalgo/NumberTheoryTest.java Tes fungsi matematika
 build.ps1                        Task Build, Test, dan Run
 build.xml                        Build Ant
 nbproject/                       Metadata NetBeans
@@ -96,6 +108,6 @@ Source dan file build berada langsung di root repository. Folder hasil build `bu
 
 ## Pengujian
 
-Jalankan task Test untuk memeriksa faktorisasi dan perilaku konsol. Tes memakai Java Standard Library dan dapat dijalankan tanpa akses jaringan.
+Jalankan task Test untuk memeriksa faktorisasi, FPB/KPK, nilai batas, serta menu dan penanganan masukan konsol. Tes memakai Java Standard Library dan dapat dijalankan tanpa akses jaringan.
 
-Verifikasi pada JDK 17: build dengan target Java 8 berhasil, dan 36 pemeriksaan pada `MatchalgoTest` lulus melalui PowerShell serta Ant 1.10.15. Program konsol juga berhasil dijalankan dengan masukan `46`, `12`, dan `0`.
+Verifikasi pada JDK 17: build dengan target Java 8 serta kedua kelas tes, `MatchalgoTest` dan `NumberTheoryTest`, lulus melalui PowerShell dan Ant 1.10.15. JAR juga lulus uji konsol untuk faktorisasi prima, FPB/KPK, dan pasangan batas `Integer.MIN_VALUE` dengan `Integer.MAX_VALUE`.

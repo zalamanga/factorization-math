@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Matchalgo" default="default" basedir=".">
-    <description>Build and run the prime factorization console application.</description>
+    <description>Build and run prime factorization, GCD and LCM calculators.</description>
     <import file="nbproject/build-impl.xml"/>
 
     <target name="test" depends="compile-test" description="Run regression tests without external libraries.">
+        <java classname="matchalgo.NumberTheoryTest" fork="true" failonerror="true">
+            <classpath path="${run.test.classpath}"/>
+            <jvmarg value="-ea"/>
+        </java>
         <java classname="matchalgo.MatchalgoTest" fork="true" failonerror="true">
             <classpath path="${run.test.classpath}"/>
-            <assertions enableSystemAssertions="true">
-                <enable/>
-            </assertions>
+            <jvmarg value="-ea"/>
         </java>
     </target>
 </project>
