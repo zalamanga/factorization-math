@@ -6,6 +6,12 @@ Contoh faktorisasi prima: `46 = 2 × 23` dan `12 = 2 × 2 × 3`. Faktor yang ber
 
 Program memakai Java Standard Library tanpa dependency tambahan atau database.
 
+## Contoh keluaran terminal
+
+![Contoh keluaran terminal Factorization Math untuk faktorisasi 46 dan FPB/KPK 12 serta 18](docs/images/terminal-output.png)
+
+Transkrip hasil eksekusi program yang dirender menjadi gambar. Masukan berurutan: `1`, `46`, `2`, `12`, `18`, lalu `0` untuk keluar. Gambar memuat keluaran program; masukan yang dikirim melalui stdin tidak ditampilkan ulang.
+
 ## Kebutuhan
 
 - JDK 11 atau lebih baru untuk script build, dengan `JAVA_HOME` atau `java`, `javac`, dan `jar` tersedia di PATH.
