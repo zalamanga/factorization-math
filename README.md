@@ -82,6 +82,8 @@ Masukan dipisahkan oleh spasi atau baris baru. Bilangan desimal seperti `2.5` ti
 
 ## API dan algoritma
 
+[Alur kode](docs/CODE_FLOW.md) menjelaskan menu, validasi token, akhir input, dan hubungan perhitungan faktorisasi dengan FPB/KPK.
+
 Semua kelas berikut berada dalam package `matchalgo`.
 
 | Pemanggilan | Hasil |
